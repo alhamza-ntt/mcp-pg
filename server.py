@@ -1,49 +1,27 @@
+# server.py
+import os
 import httpx
 from fastmcp import FastMCP
 
-# Create an HTTP client for the target API
 client = httpx.AsyncClient(base_url="https://jsonplaceholder.typicode.com")
 
-# Define a simplified OpenAPI spec for JSONPlaceholder
 openapi_spec = {
     "openapi": "3.0.0",
     "info": {"title": "JSONPlaceholder API", "version": "1.0"},
     "paths": {
-        "/users": {
-            "get": {
-                "summary": "Get all users",
-                "operationId": "get_users",
-                "responses": {"200": {"description": "A list of users."}}
-            }
-        },
-        "/users/{id}": {
-            "get": {
-                "summary": "Get a user by ID",
-                "operationId": "get_user_by_id",
-                "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                "responses": {"200": {"description": "A single user."}}
-            }
-        },
-        "/posts": {
-            "get": {
-                "summary": "Get all posts",
-                "operationId": "get_posts",
-                "responses": {"200": {"description": "A list of posts."}}
-            }
-        },
-        "/posts/{id}": {
-            "get": {
-                "summary": "Get a post by ID",
-                "operationId": "get_post_by_id",
-                "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                "responses": {"200": {"description": "A single post."}}
-            }
-        
-    },
+        "/users": {"get": {"summary": "Get all users", "operationId": "get_users",
+                           "responses": {"200": {"description": "A list of users."}}}},
+        "/users/{id}": {"get": {"summary": "Get a user by ID", "operationId": "get_user_by_id",
+                                "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                                "responses": {"200": {"description": "A single user."}}}},
+        "/posts": {"get": {"summary": "Get all posts", "operationId": "get_posts",
+                           "responses": {"200": {"description": "A list of posts."}}}},
+        "/posts/{id}": {"get": {"summary": "Get a post by ID", "operationId": "get_post_by_id",
+                                "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                                "responses": {"200": {"description": "A single post."}}}},
     },
 }
 
-# Create the MCP server from the OpenAPI spec
 mcp = FastMCP.from_openapi(
     openapi_spec=openapi_spec,
     client=client,
@@ -51,4 +29,6 @@ mcp = FastMCP.from_openapi(
 )
 
 if __name__ == "__main__":
-    mcp.run(transport="http", port=8000)
+    port = int(os.environ.get("PORT", "8000"))
+    host = os.environ.get("HOST", "0.0.0.0")
+    mcp.run(transport="http", host=host, port=port)
