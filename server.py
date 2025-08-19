@@ -1,7 +1,8 @@
-# server.py
 import os
 import httpx
 from fastmcp import FastMCP
+from starlette.requests import Request
+from starlette.responses import JSONResponse, PlainTextResponse
 
 client = httpx.AsyncClient(base_url="https://jsonplaceholder.typicode.com")
 
@@ -28,7 +29,16 @@ mcp = FastMCP.from_openapi(
     name="JSONPlaceholder MCP Server"
 )
 
+# Health check and root landing
+@mcp.custom_route("/healthz", methods=["GET"])
+async def healthz(_: Request) -> PlainTextResponse:
+    return PlainTextResponse("OK")
+
+@mcp.custom_route("/", methods=["GET"])
+async def root(_: Request) -> JSONResponse:
+    return JSONResponse({"status": "ok", "mcp_endpoint": "/mcp"})
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
-    host = os.environ.get("HOST", "0.0.0.0")
+    host = os.environ.get("HOST", "0.0.0.0"))
     mcp.run(transport="http", host=host, port=port)
