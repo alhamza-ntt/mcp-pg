@@ -40,5 +40,6 @@ async def root(_: Request) -> JSONResponse:
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
-    host = os.environ.get("HOST", "0.0.0.0"))
+    host = os.environ.get("HOST", "0.0.0.0")
     mcp.run(transport="http", host=host, port=port)
+
