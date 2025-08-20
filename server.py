@@ -27,10 +27,11 @@ openapi_spec = {
 mcp = FastMCP.from_openapi(
     openapi_spec=openapi_spec,
     client=client,
-    name="JSONPlaceholder MCP Server"
+    name="JSONPlaceholder MCP Server",
+    stateless_http=True,          # << disable MCP sessions
+    json_response=True            # << simpler responses for some clients
 )
 
-# Health check and root landing
 @mcp.custom_route("/healthz", methods=["GET"])
 async def healthz(_: Request) -> PlainTextResponse:
     return PlainTextResponse("OK")
@@ -42,5 +43,7 @@ async def root(_: Request) -> JSONResponse:
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
-    mcp.run(transport="http", host=host, port=port)
+    # Be explicit about the modern transport and path
+    mcp.run(transport="streamable-http", host=host, port=port, path="/mcp")
+
 
