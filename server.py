@@ -5,7 +5,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse
 
 
-client = httpx.Client(base_url="https://jsonplaceholder.typicode.com")
+client = httpx.AsyncClient(base_url="https://jsonplaceholder.typicode.com")
 
 openapi_spec = {
     "openapi": "3.0.0",
@@ -45,5 +45,6 @@ if __name__ == "__main__":
     host = os.environ.get("HOST", "0.0.0.0")
     # Be explicit about the modern transport and path
     mcp.run(transport="streamable-http", host=host, port=port, path="/mcp")
+
 
 
