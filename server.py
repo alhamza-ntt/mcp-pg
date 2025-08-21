@@ -5,10 +5,12 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse
 
 
-def _log_request(request: httpx.Request):
+import httpx
+
+async def _log_request(request: httpx.Request):
     print("→", request.method, request.url)
 
-def _log_response(response: httpx.Response):
+async def _log_response(response: httpx.Response):
     print("←", response.status_code, response.headers.get("content-type"))
 
 client = httpx.AsyncClient(
@@ -17,6 +19,7 @@ client = httpx.AsyncClient(
     follow_redirects=True,
     event_hooks={"request": [_log_request], "response": [_log_response]},
 )
+
 
 
 openapi_spec = {
@@ -105,6 +108,7 @@ if __name__ == "__main__":
     host = os.environ.get("HOST", "0.0.0.0")
     # Be explicit about the modern transport and path
     mcp.run(transport="streamable-http", host=host, port=port, path="/mcp")
+
 
 
 
