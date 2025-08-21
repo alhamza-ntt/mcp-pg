@@ -4,6 +4,7 @@ import json
 import os
 from fastapi import Request
 from fastapi.responses import JSONResponse, PlainTextResponse
+import uvicorn
 
 # Build headers
 headers = {
@@ -11,27 +12,23 @@ headers = {
     "Accept": "application/json",
     "DataServiceVersion": "2.0",
 }
-params = {
-    "$top": 2,
-    "$select": "lastModifiedBy",
-}
 
-# HTTPX async client for SAP API
+# Avoid global default query params that can conflict with tool calls
 client = httpx.AsyncClient(
     base_url="https://sandbox.api.sap.com/successfactors/odata/v2",
     headers=headers,
-    params=params,
+    timeout=30.0,
 )
 
 # Load OpenAPI spec as dict
 with open("payrol_converted.json", "r") as f:
     spec = json.load(f)
 
-# Pass the dict, not the raw string
+# Give the server a meaningful name for logs
 mcp = FastMCP.from_openapi(
     openapi_spec=spec,
     client=client,
-    name="JSONPlaceholder MCP Server"
+    name="PayrollTimeSheet"
 )
 
 # Health check endpoint
@@ -48,8 +45,10 @@ async def root(_: Request) -> JSONResponse:
         "message": "Welcome to the SAP MCP server"
     })
 
+# Create an ASGI app in **stateless** Streamable HTTP mode
+app = mcp.streamable_http_app(stateless_http=True)
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
-    mcp.run(transport="http", host=host, port=port)
-
+    uvicorn.run(app, host=host, port=port)
