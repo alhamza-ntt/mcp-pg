@@ -18,7 +18,7 @@ params = {
 
 # HTTPX async client for SAP API
 client = httpx.AsyncClient(
-    base_url="https://sandbox.api.sap.com/successfactors/odata/v2/EmployeeTimeSheet",
+    base_url="https://sandbox.api.sap.com/successfactors/odata/v2",
     headers=headers,
     params=params,
 )
@@ -52,3 +52,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
     mcp.run(transport="http", host=host, port=port)
+
