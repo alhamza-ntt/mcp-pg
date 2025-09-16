@@ -16,7 +16,7 @@ async def build_apps():
 
     # -------- tools1: SuccessFactors ClockInClockOut --------
     sf_headers = {
-        "APIKey": os.getenv("SAP_APIKey"),
+        "APIKey": os.getenv("clock_apikey"),
         "Accept": "application/json",
         "DataServiceVersion": "2.0",
     }
@@ -116,3 +116,4 @@ if __name__ == "__main__":
     host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run(app, host=host, port=port)
+
