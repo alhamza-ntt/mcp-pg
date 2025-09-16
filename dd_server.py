@@ -16,7 +16,7 @@ async def build_apps():
 
     # -------- tools1: SuccessFactors ClockInClockOut --------
     sf_headers = {
-        "APIKey": os.getenv("clock_apikey"),
+        "APIKey": os.getenv("SAP_APIKey"),
         "Accept": "application/json",
         "DataServiceVersion": "2.0",
     }
@@ -26,7 +26,7 @@ async def build_apps():
         timeout=30.0,
     )
 
-    with open("specs/ClockInClockOutIntegration.json", "r", encoding="utf-8") as f:
+    with open("specs/simplified_payroll.json", "r", encoding="utf-8") as f:
         tools1_spec = json.load(f)
 
     tools1_mcp = FastMCP.from_openapi(
@@ -116,4 +116,5 @@ if __name__ == "__main__":
     host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run(app, host=host, port=port)
+
 
