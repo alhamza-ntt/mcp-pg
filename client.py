@@ -2,8 +2,11 @@ import asyncio
 from fastmcp import Client
 import random
 
+
+azclinet = "https://pg-aib-afgmech7ccdqdedh.canadacentral-01.azurewebsites.net/"
+sapclinet = "https://mcp-api.cfapps.us10-001.hana.ondemand.com"
 async def main():
-    async with Client("https://mcp-api.cfapps.us10-001.hana.ondemand.com/mcp") as client:
+    async with Client(f"{sapclinet}/mcp") as client:
         
         tools = await client.list_tools()
         

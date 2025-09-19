@@ -1,193 +1,345 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Worker Assistant OData (native)",
-    "version": "1.0.0"
+    "title": "Worker Assistant Tools (Wrapper over OData)",
+    "version": "1.0.0",
+    "description": "High-level tools that wrap the OData service. These endpoints build safe OData queries internally and return JSON."
   },
   "servers": [
     {
       "url": "https://ntt-pi-dev.it-cpi001-rt.cfapps.eu10.hana.ondemand.com/http/df.nrw-sfd100-odata/zpp_workerassistant_srv"
-    }
+      }
   ],
   "security": [
     { "basicAuth": [] }
   ],
   "paths": {
-    "/WorkerGenericSet": {
-      "get": {
-        "operationId": "getWorkerGenericSet",
-        "tags": ["WorkerGenericSet"],
-        "summary": "Query WorkerGenericSet (collection, native OData)",
-        "parameters": [
-          {
-            "name": "$filter",
-            "in": "query",
-            "allowReserved": true,
-            "schema": { "type": "string" },
-            "description": "OData filter, e.g. PlantNumber eq '1000' and WorkplaceName eq 'WAINDYCA'"
-          },
-          {
-            "name": "$select",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": ["Function","EntryNumber","PlantNumber","ViewName","WorkplaceName","EntryDescription"]
+    "/tools/listWorkerEntries": {
+      "post": {
+        "operationId": "list_worker_entries",
+        "summary": "List worker entries for a plant and workplace (safe OData wrapper).",
+        "description": "Builds `$filter=PlantNumber eq '...' and WorkplaceName eq '...'` and applies optional select/expand/orderby/top/skip.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListWorkerEntriesRequest" },
+              "examples": {
+                "basic": {
+                  "summary": "List entries in plant 1000 / WAINDYCA (default top=40)",
+                  "value": { "plant_number": "1000", "workplace_name": "WAINDYCA" }
+                },
+                "withOptions": {
+                  "summary": "With select/expand/orderby/paging",
+                  "value": {
+                    "plant_number": "1000",
+                    "workplace_name": "WAINDYCA",
+                    "select": ["EntryNumber", "EntryDescription", "ViewName"],
+                    "expand": "WorkerGenericFieldlist",
+                    "orderby": "EntryNumber",
+                    "top": 40,
+                    "skip": 0
+                  }
+                }
               }
-            },
-            "description": "Return only these properties."
-          },
-          {
-            "name": "$expand",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "WorkerGenericItems",
-                  "WorkerGenericFieldlist",
-                  "WorkerGenericItems/WorkerGenericItemsFieldlist"
-                ]
-              }
-            },
-            "description": "Expand navigation properties (native; depth-2 allowed)."
-          },
-          {
-            "name": "$orderby",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "Function","Function desc",
-                  "EntryNumber","EntryNumber desc",
-                  "PlantNumber","PlantNumber desc",
-                  "ViewName","ViewName desc",
-                  "WorkplaceName","WorkplaceName desc",
-                  "EntryDescription","EntryDescription desc"
-                ]
-              }
-            },
-            "description": "Sort by properties."
-          },
-          {
-            "name": "$top",
-            "in": "query",
-            "schema": { "type": "integer", "minimum": 1, "default": 40 },
-            "description": "Limit results."
-          },
-          {
-            "name": "$skip",
-            "in": "query",
-            "schema": { "type": "integer", "minimum": 0 },
-            "description": "Skip results."
-          },
-          {
-            "name": "$count",
-            "in": "query",
-            "schema": { "type": "boolean" },
-            "description": "Include total count."
-          },
-          {
-            "name": "$format",
-            "in": "query",
-            "schema": { "type": "string", "enum": ["json","xml"], "default": "json" },
-            "description": "Response format."
+            }
           }
-        ],
+        },
         "responses": {
           "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Backend error normalized (e.g., SAP dump)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BackendError" } } } },
+          "default": { "description": "Unhandled error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
         },
-        "examples": {
-          "ex1": {
-            "summary": "Your #1 URL (fieldlist expand)",
-            "value": "/WorkerGenericSet?$expand=WorkerGenericFieldlist&$filter=PlantNumber%20eq%20'1000'%20and%20WorkplaceName%20eq%20'WAINDYCA'&$format=json&$top=40"
-          },
-          "ex2": {
-            "summary": "Your #2 URL (deep expand)",
-            "value": "/WorkerGenericSet?$expand=WorkerGenericItems/WorkerGenericItemsFieldlist&$filter=EntryNumber%20eq%20'0000010003180010'%20and%20PlantNumber%20eq%20'1000'%20and%20ViewName%20eq%20''%20and%20WorkplaceName%20eq%20'WAINDYCA'&$format=json&$top=40"
-          }
-        }
+        "tags": ["WorkerEntries"]
       }
     },
-    "/WorkerGenericItemSet(EntryNumber='{EntryNumber}',PlantNumber='{PlantNumber}',WorkplaceName='{WorkplaceName}',ViewName='{ViewName}')": {
-      "get": {
-        "operationId": "getWorkerGenericItemSetByKey",
-        "tags": ["WorkerGenericItemSet"],
-        "summary": "Read single WorkerGenericItemSet by composite key (native OData key segment)",
-        "parameters": [
-          { "name": "EntryNumber", "in": "path", "required": true, "schema": { "type": "string" }, "example": "0000010003180010" },
-          { "name": "PlantNumber", "in": "path", "required": true, "schema": { "type": "string" }, "example": "1000" },
-          { "name": "WorkplaceName", "in": "path", "required": true, "schema": { "type": "string" }, "example": "WAINDYCA" },
-          { "name": "ViewName", "in": "path", "required": true, "schema": { "type": "string" }, "example": "HEADDATA" },
-          {
-            "name": "$select",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": ["EntryNumber","PlantNumber","WorkplaceName","ViewName","Description","ViewType","ViewIcon"]
+    "/tools/getWorkerEntryByKey": {
+      "post": {
+        "operationId": "get_worker_entry_by_key",
+        "summary": "Read a single worker entry by composite key.",
+        "description": "Wraps the OData key-segment path and optionally expands WorkerGenericItemsFieldlist.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GetWorkerEntryByKeyRequest" },
+              "examples": {
+                "byKey": {
+                  "summary": "HEADDATA view with expand",
+                  "value": {
+                    "entry_number": "0000010003180010",
+                    "plant_number": "1000",
+                    "workplace_name": "WAINDYCA",
+                    "view_name": "HEADDATA",
+                    "select": ["EntryNumber", "PlantNumber", "WorkplaceName", "ViewName", "Description"],
+                    "expand": "WorkerGenericItemsFieldlist"
+                  }
+                }
               }
-            },
-            "description": "Return only these properties."
-          },
-          {
-            "name": "$expand",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": { "type": "string", "enum": ["WorkerGenericItemsFieldlist"] }
-            },
-            "description": "Expand navigation properties."
-          },
-          {
-            "name": "$format",
-            "in": "query",
-            "schema": { "type": "string", "enum": ["json","xml"], "default": "json" },
-            "description": "Response format."
+            }
           }
-        ],
+        },
         "responses": {
           "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "404": { "description": "Not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Backend error normalized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BackendError" } } } },
+          "default": { "description": "Unhandled error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
         },
-        "examples": {
-          "ex3": {
-            "summary": "Your #3 URL (by key + expand)",
-            "value": "/WorkerGenericItemSet(EntryNumber='0000010003180010',PlantNumber='1000',WorkplaceName='WAINDYCA',ViewName='HEADDATA')?$expand=WorkerGenericItemsFieldlist&$format=json"
+        "tags": ["WorkerEntries"]
+      }
+    },
+    "/tools/listWorkerItemsForEntry": {
+      "post": {
+        "operationId": "list_worker_items_for_entry",
+        "summary": "Get items for one entry (deep expand).",
+        "description": "Builds a safe filter on the entry and applies deep expand `$expand=WorkerGenericItems/WorkerGenericItemsFieldlist`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListWorkerItemsForEntryRequest" },
+              "examples": {
+                "deepExpand": {
+                  "summary": "Deep items for entry",
+                  "value": {
+                    "entry_number": "0000010003180010",
+                    "plant_number": "1000",
+                    "workplace_name": "WAINDYCA",
+                    "view_name": ""
+                  }
+                }
+              }
+            }
           }
-        }
+        },
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Backend error normalized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BackendError" } } } },
+          "default": { "description": "Unhandled error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        },
+        "tags": ["WorkerItems"]
+      }
+    },
+    "/tools/listFieldlistForEntries": {
+      "post": {
+        "operationId": "list_fieldlist_for_entries",
+        "summary": "Fetch field definitions together with entries (single-hop expand).",
+        "description": "Forces `$expand=WorkerGenericFieldlist` alongside the plant/workplace filter.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListFieldlistForEntriesRequest" },
+              "examples": {
+                "fieldlist": {
+                  "summary": "Entries + field metadata",
+                  "value": {
+                    "plant_number": "1000",
+                    "workplace_name": "WAINDYCA",
+                    "select": ["EntryNumber", "EntryDescription", "ViewName"],
+                    "top": 40
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Backend error normalized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BackendError" } } } },
+          "default": { "description": "Unhandled error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        },
+        "tags": ["WorkerEntries"]
+      }
+    },
+    "/tools/searchWorkerEntries": {
+      "post": {
+        "operationId": "search_worker_entries",
+        "summary": "Flexible search with whitelisted filters.",
+        "description": "Optional safety valve. Accepts specific fields only and a constrained extra_filters string (eq/and on known fields).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SearchWorkerEntriesRequest" },
+              "examples": {
+                "byEntryAndPlant": {
+                  "summary": "Entry + plant",
+                  "value": { "entry_number": "0000010003180010", "plant_number": "1000" }
+                },
+                "withExtra": {
+                  "summary": "Constrained extra filters",
+                  "value": {
+                    "plant_number": "1000",
+                    "workplace_name": "WAINDYCA",
+                    "extra_filters": "ViewName eq ''"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "400": { "description": "Validation or forbidden filter", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Backend error normalized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BackendError" } } } },
+          "default": { "description": "Unhandled error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        },
+        "tags": ["WorkerEntries"]
       }
     }
   },
   "components": {
     "securitySchemes": {
       "basicAuth": { "type": "http", "scheme": "basic" }
+    },
+    "schemas": {
+      "SelectEntryProps": {
+        "type": "string",
+        "enum": ["Function", "EntryNumber", "PlantNumber", "ViewName", "WorkplaceName", "EntryDescription"]
+      },
+      "OrderbyEntryProps": {
+        "type": "string",
+        "enum": [
+          "Function", "Function desc",
+          "EntryNumber", "EntryNumber desc",
+          "PlantNumber", "PlantNumber desc",
+          "ViewName", "ViewName desc",
+          "WorkplaceName", "WorkplaceName desc",
+          "EntryDescription", "EntryDescription desc"
+        ]
+      },
+      "ExpandSingleHop": {
+        "type": "string",
+        "enum": ["WorkerGenericFieldlist"]
+      },
+      "ExpandKeyEntry": {
+        "type": "string",
+        "enum": ["WorkerGenericItemsFieldlist"]
+      },
+
+      "ListWorkerEntriesRequest": {
+        "type": "object",
+        "required": ["plant_number", "workplace_name"],
+        "properties": {
+          "plant_number": { "type": "string" },
+          "workplace_name": { "type": "string" },
+          "select": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SelectEntryProps" },
+            "uniqueItems": true
+          },
+          "expand": { "$ref": "#/components/schemas/ExpandSingleHop" },
+          "orderby": { "$ref": "#/components/schemas/OrderbyEntryProps" },
+          "top": { "type": "integer", "minimum": 1, "default": 40 },
+          "skip": { "type": "integer", "minimum": 0 }
+        }
+      },
+
+      "GetWorkerEntryByKeyRequest": {
+        "type": "object",
+        "required": ["entry_number", "plant_number", "workplace_name", "view_name"],
+        "properties": {
+          "entry_number": { "type": "string", "description": "Zero-pad if required by backend." },
+          "plant_number": { "type": "string" },
+          "workplace_name": { "type": "string" },
+          "view_name": { "type": "string" },
+          "select": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["EntryNumber", "PlantNumber", "WorkplaceName", "ViewName", "Description", "ViewType", "ViewIcon"]
+            },
+            "uniqueItems": true
+          },
+          "expand": { "$ref": "#/components/schemas/ExpandKeyEntry" }
+        }
+      },
+
+      "ListWorkerItemsForEntryRequest": {
+        "type": "object",
+        "required": ["entry_number", "plant_number", "workplace_name"],
+        "properties": {
+          "entry_number": { "type": "string" },
+          "plant_number": { "type": "string" },
+          "workplace_name": { "type": "string" },
+          "view_name": { "type": "string", "description": "Optional; pass empty string if not used." }
+        }
+      },
+
+      "ListFieldlistForEntriesRequest": {
+        "type": "object",
+        "required": ["plant_number", "workplace_name"],
+        "properties": {
+          "plant_number": { "type": "string" },
+          "workplace_name": { "type": "string" },
+          "select": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SelectEntryProps" },
+            "uniqueItems": true
+          },
+          "orderby": { "$ref": "#/components/schemas/OrderbyEntryProps" },
+          "top": { "type": "integer", "minimum": 1, "default": 40 },
+          "skip": { "type": "integer", "minimum": 0 }
+        }
+      },
+
+      "SearchWorkerEntriesRequest": {
+        "type": "object",
+        "properties": {
+          "entry_number": { "type": "string" },
+          "plant_number": { "type": "string" },
+          "workplace_name": { "type": "string" },
+          "view_name": { "type": "string" },
+          "select": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SelectEntryProps" },
+            "uniqueItems": true
+          },
+          "orderby": { "$ref": "#/components/schemas/OrderbyEntryProps" },
+          "top": { "type": "integer", "minimum": 1, "default": 40 },
+          "skip": { "type": "integer", "minimum": 0 },
+          "extra_filters": {
+            "type": "string",
+            "description": "Constrained syntax: only `eq` and `and` across known fields (EntryNumber, PlantNumber, WorkplaceName, ViewName)."
+          }
+        }
+      },
+
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "details": { "type": "object" }
+        }
+      },
+      "BackendError": {
+        "type": "object",
+        "description": "Normalized backend error (e.g., SAP RABAX_STATE) with guidance.",
+        "properties": {
+          "code": { "type": "string", "example": "RABAX_STATE" },
+          "message": { "type": "string" },
+          "when": { "type": "string", "format": "date-time" },
+          "actionable_guidance": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": [
+              "Check ST22 (dump analysis) at the given timestamp.",
+              "Verify OData service configuration for WorkerGeneric* entities."
+            ]
+          },
+          "original_request": { "type": "object" }
+        }
+      }
     }
-  }
+  },
+  "tags": [
+    { "name": "WorkerEntries" },
+    { "name": "WorkerItems" }
+  ]
 }
