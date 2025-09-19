@@ -9,7 +9,9 @@
       "url": "https://ntt-pi-dev.it-cpi001-rt.cfapps.eu10.hana.ondemand.com/http/df.nrw-sfd100-odata/zpp_workerassistant_srv"
     }
   ],
-  "security": [{ "basicAuth": [] }],
+  "security": [
+    { "basicAuth": [] }
+  ],
   "paths": {
     "/WorkerGenericSet": {
       "get": {
@@ -17,7 +19,13 @@
         "tags": ["WorkerGenericSet"],
         "summary": "Query WorkerGenericSet (collection, native OData)",
         "parameters": [
-          { "name": "$filter", "in": "query", "allowReserved": true, "schema": { "type": "string" }, "description": "OData filter, e.g. PlantNumber eq '1000' and WorkplaceName eq 'WAINDYCA'" },
+          {
+            "name": "$filter",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" },
+            "description": "OData filter, e.g. PlantNumber eq '1000' and WorkplaceName eq 'WAINDYCA'"
+          },
           {
             "name": "$select",
             "in": "query",
@@ -27,7 +35,10 @@
             "schema": {
               "type": "array",
               "uniqueItems": true,
-              "items": { "type": "string", "enum": ["Function","EntryNumber","PlantNumber","ViewName","WorkplaceName","EntryDescription"] }
+              "items": {
+                "type": "string",
+                "enum": ["Function","EntryNumber","PlantNumber","ViewName","WorkplaceName","EntryDescription"]
+              }
             },
             "description": "Return only these properties."
           },
@@ -49,7 +60,7 @@
                 ]
               }
             },
-            "description": "Expand navigation properties (depth-2 allowed)."
+            "description": "Expand navigation properties (native; depth-2 allowed)."
           },
           {
             "name": "$orderby",
@@ -74,131 +85,47 @@
             },
             "description": "Sort by properties."
           },
-          { "name": "$top", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 40 }, "description": "Limit results." },
-          { "name": "$skip", "in": "query", "schema": { "type": "integer", "minimum": 0 }, "description": "Skip results." },
-          { "name": "$count", "in": "query", "schema": { "type": "boolean" }, "description": "Include total count." },
-          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" }, "description": "Response format." }
+          {
+            "name": "$top",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "default": 40 },
+            "description": "Limit results."
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 0 },
+            "description": "Skip results."
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Include total count."
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["json","xml"], "default": "json" },
+            "description": "Response format."
+          }
         ],
         "responses": {
           "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
           "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
         },
         "examples": {
-          "ex_fieldlist_expand": {
-            "summary": "Your working URL (#1)",
-            "value": "/WorkerGenericSet?$expand=WorkerGenericFieldlist&$filter=PlantNumber%20eq%20%271000%27%20and%20WorkplaceName%20eq%20%27WAINDYCA%27%20&$format=json&$top=40"
+          "ex1": {
+            "summary": "Your #1 URL (fieldlist expand)",
+            "value": "/WorkerGenericSet?$expand=WorkerGenericFieldlist&$filter=PlantNumber%20eq%20'1000'%20and%20WorkplaceName%20eq%20'WAINDYCA'&$format=json&$top=40"
           },
-          "ex_deep_expand": {
-            "summary": "Your working URL (#2, deep expand)",
-            "value": "/WorkerGenericSet?$expand=WorkerGenericItems%2FWorkerGenericItemsFieldlist&$filter=EntryNumber%20eq%20%270000010003180010%27%20and%20PlantNumber%20eq%20%271000%27%20and%20ViewName%20eq%20%27%27%20and%20WorkplaceName%20eq%20%27WAINDYCA%27&$format=json&$top=40"
+          "ex2": {
+            "summary": "Your #2 URL (deep expand)",
+            "value": "/WorkerGenericSet?$expand=WorkerGenericItems/WorkerGenericItemsFieldlist&$filter=EntryNumber%20eq%20'0000010003180010'%20and%20PlantNumber%20eq%20'1000'%20and%20ViewName%20eq%20''%20and%20WorkplaceName%20eq%20'WAINDYCA'&$format=json&$top=40"
           }
         }
       }
     },
-
-    "/WorkerGenericSet/$count": {
-      "get": {
-        "operationId": "countWorkerGenericSet",
-        "tags": ["WorkerGenericSet"],
-        "summary": "Get count of WorkerGenericSet",
-        "parameters": [
-          { "name": "$filter", "in": "query", "allowReserved": true, "schema": { "type": "string" }, "description": "Optional filter to count a subset." }
-        ],
-        "responses": {
-          "200": { "description": "OK", "content": { "text/plain": { "schema": { "type": "string", "example": "123" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
-        }
-      }
-    },
-
-    "/WorkerGenericItemSet": {
-      "get": {
-        "operationId": "getWorkerGenericItemSet",
-        "tags": ["WorkerGenericItemSet"],
-        "summary": "Query WorkerGenericItemSet (collection, native OData)",
-        "parameters": [
-          { "name": "$filter", "in": "query", "allowReserved": true, "schema": { "type": "string" }, "description": "Filter by key parts or attributes, e.g. EntryNumber eq '0000010003180010' and PlantNumber eq '1000'" },
-          {
-            "name": "$select",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": { "type": "string", "enum": ["EntryNumber","PlantNumber","WorkplaceName","ViewName","Description","ViewType","ViewIcon"] }
-            },
-            "description": "Return only these properties."
-          },
-          {
-            "name": "$expand",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": { "type": "string", "enum": ["WorkerGenericItemsFieldlist"] }
-            },
-            "description": "Expand navigation properties."
-          },
-          {
-            "name": "$orderby",
-            "in": "query",
-            "style": "form",
-            "explode": false,
-            "allowReserved": true,
-            "schema": {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "EntryNumber","EntryNumber desc",
-                  "PlantNumber","PlantNumber desc",
-                  "WorkplaceName","WorkplaceName desc",
-                  "ViewName","ViewName desc",
-                  "Description","Description desc"
-                ]
-              }
-            },
-            "description": "Sort by properties."
-          },
-          { "name": "$top", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 40 }, "description": "Limit results." },
-          { "name": "$skip", "in": "query", "schema": { "type": "integer", "minimum": 0 }, "description": "Skip results." },
-          { "name": "$count", "in": "query", "schema": { "type": "boolean" }, "description": "Include total count." },
-          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" }, "description": "Response format." }
-        ],
-        "responses": {
-          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
-        },
-        "examples": {
-          "ex_item_filter": {
-            "summary": "Filter by key parts + expand",
-            "value": "/WorkerGenericItemSet?$filter=EntryNumber%20eq%20%270000010003180010%27%20and%20PlantNumber%20eq%20%271000%27%20and%20WorkplaceName%20eq%20%27WAINDYCA%27%20and%20ViewName%20eq%20%27HEADDATA%27&$expand=WorkerGenericItemsFieldlist&$format=json"
-          }
-        }
-      }
-    },
-
-    "/WorkerGenericItemSet/$count": {
-      "get": {
-        "operationId": "countWorkerGenericItemSet",
-        "tags": ["WorkerGenericItemSet"],
-        "summary": "Get count of WorkerGenericItemSet",
-        "parameters": [
-          { "name": "$filter", "in": "query", "allowReserved": true, "schema": { "type": "string" }, "description": "Optional filter to count a subset." }
-        ],
-        "responses": {
-          "200": { "description": "OK", "content": { "text/plain": { "schema": { "type": "string", "example": "42" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
-        }
-      }
-    },
-
     "/WorkerGenericItemSet(EntryNumber='{EntryNumber}',PlantNumber='{PlantNumber}',WorkplaceName='{WorkplaceName}',ViewName='{ViewName}')": {
       "get": {
         "operationId": "getWorkerGenericItemSetByKey",
@@ -218,7 +145,10 @@
             "schema": {
               "type": "array",
               "uniqueItems": true,
-              "items": { "type": "string", "enum": ["EntryNumber","PlantNumber","WorkplaceName","ViewName","Description","ViewType","ViewIcon"] }
+              "items": {
+                "type": "string",
+                "enum": ["EntryNumber","PlantNumber","WorkplaceName","ViewName","Description","ViewType","ViewIcon"]
+              }
             },
             "description": "Return only these properties."
           },
@@ -235,29 +165,22 @@
             },
             "description": "Expand navigation properties."
           },
-          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" }, "description": "Response format." }
+          {
+            "name": "$format",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["json","xml"], "default": "json" },
+            "description": "Response format."
+          }
         ],
         "responses": {
           "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
           "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
         },
         "examples": {
-          "ex_key_expand": {
-            "summary": "Your working URL (#3, by key + expand)",
+          "ex3": {
+            "summary": "Your #3 URL (by key + expand)",
             "value": "/WorkerGenericItemSet(EntryNumber='0000010003180010',PlantNumber='1000',WorkplaceName='WAINDYCA',ViewName='HEADDATA')?$expand=WorkerGenericItemsFieldlist&$format=json"
           }
-        }
-      }
-    },
-
-    "/$metadata": {
-      "get": {
-        "operationId": "getMetadata",
-        "tags": ["Service"],
-        "summary": "Get OData metadata (EDMX)",
-        "responses": {
-          "200": { "description": "OK", "content": { "application/xml": { "schema": { "type": "string" } } } },
-          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
         }
       }
     }

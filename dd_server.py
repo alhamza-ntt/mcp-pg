@@ -1,4 +1,3 @@
-# combined_mcp_app.py
 import os
 import json
 import asyncio
@@ -10,11 +9,13 @@ from contextlib import asynccontextmanager
 from fastmcp import FastMCP
 import uvicorn
 
-# ---- build sub-apps (async because of import_server) ----
+
+
+#MCP app with 2 diffrent MCP tools combined with fast api as tools1/mcp, tools2/mcp and /mcp for both
+
 async def build_apps():
     load_dotenv()
 
-    # -------- tools1: SuccessFactors ClockInClockOut --------
     sf_headers = {
         "APIKey": os.getenv("SAP_APIKey"),
         "Accept": "application/json",
@@ -38,7 +39,6 @@ async def build_apps():
     )
     tools1_app = tools1_mcp.http_app(path="/mcp")  # -> /tools1/mcp when mounted
 
-    # -------- tools2: CPI OData Worker Assistant --------
     creduser = os.getenv("CREDUSERNAME")
     credpass = os.getenv("CREDPASS")
     if not creduser or not credpass:
@@ -63,13 +63,12 @@ async def build_apps():
         stateless_http=True,
         json_response=True,
     )
-    tools2_app = tools2_mcp.http_app(path="/mcp")  # -> /tools2/mcp when mounted
+    tools2_app = tools2_mcp.http_app(path="/mcp")  
 
-    # -------- combined endpoint (both, with prefixes) --------
     combined = FastMCP(name="combined")
     await combined.import_server(tools1_mcp, prefix="tools1")
     await combined.import_server(tools2_mcp, prefix="tools2")
-    combined_app = combined.http_app(path="/mcp")  # -> /mcp when mounted at "/"
+    combined_app = combined.http_app(path="/mcp")  
 
     return tools1_app, tools2_app, combined_app
 
@@ -77,7 +76,6 @@ async def build_apps():
 def make_parent_app(tools1_app, tools2_app, combined_app):
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        # ensure sub-app startup/shutdown are called
         async with tools1_app.lifespan(app):
             async with tools2_app.lifespan(app):
                 async with combined_app.lifespan(app):
@@ -85,7 +83,6 @@ def make_parent_app(tools1_app, tools2_app, combined_app):
 
     app = FastAPI(lifespan=lifespan)
 
-    # simple health/root on the parent
     @app.get("/healthz")
     async def healthz(_: Request):
         return PlainTextResponse("OK")
@@ -101,10 +98,9 @@ def make_parent_app(tools1_app, tools2_app, combined_app):
             }
         })
 
-    # mount sub-apps
-    app.mount("/tools1", tools1_app)   # -> http://host:port/tools1/mcp
-    app.mount("/tools2", tools2_app)   # -> http://host:port/tools2/mcp
-    app.mount("/", combined_app)       # -> http://host:port/mcp  (both)
+    app.mount("/tools1", tools1_app)   
+    app.mount("/tools2", tools2_app)   
+    app.mount("/", combined_app)       
 
     return app
 

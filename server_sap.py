@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+#SAP MCP with payroll api from SAP API Business Hub as and authenticated client
+
 headerss = {
     "APIKey": os.getenv("SAP_APIKey"),
     "Accept": "application/json",
