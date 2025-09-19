@@ -3,7 +3,7 @@ fastapi
 uvicorn
 httpx
 fastmcp
-
+openai
 azure-common==1.1.28
 azure-core==1.30.2
 azure-search==1.0.0b2
