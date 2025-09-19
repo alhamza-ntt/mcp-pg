@@ -9,7 +9,7 @@ local = "http://localhost:8000"
 
 
 async def main():
-    async with Client(f"{local}/mcp") as client:
+    async with Client(f"{azclinet}/mcp") as client:
         
         tools = await client.list_tools()
         
