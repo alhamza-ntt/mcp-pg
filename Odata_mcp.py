@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 import httpx
 from fastmcp import FastMCP
@@ -52,7 +51,6 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
     mcp.run(transport="streamable-http", host=host, port=port, path="/mcp")
-=======
 
 import httpx
 from fastmcp import FastMCP
@@ -106,4 +104,3 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
     mcp.run(transport="streamable-http", host=host, port=port, path="/mcp")
->>>>>>> caf69b7ada4551b954972f191ac4fc434f0f587c
