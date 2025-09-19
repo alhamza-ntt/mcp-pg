@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "openapi": "3.0.3",
   "info": {
@@ -191,3 +192,261 @@
     }
   }
 }
+=======
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Worker Assistant OData (native, MCP-optimized)",
+    "version": "1.0.3",
+    "description": "Native SAP OData endpoints. Avoid $count and $search. Use WorkerGenericSet for lists/items; use WorkerGenericItemSet(…keys…) with ViewName='HEADDATA' for detail."
+  },
+  "servers": [
+    {
+      "url": "https://ntt-pi-dev.it-cpi001-rt.cfapps.eu10.hana.ondemand.com/http/df.nrw-sfd100-odata/zpp_workerassistant_srv"
+    }
+  ],
+  "security": [
+    { "basicAuth": [] }
+  ],
+  "paths": {
+    "/WorkerGenericSet": {
+      "get": {
+        "operationId": "getWorkerGenericSet",
+        "tags": ["WorkerGenericSet"],
+        "summary": "Query WorkerGenericSet (collection)",
+        "parameters": [
+          {
+            "name": "$filter",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" },
+            "description": "Example: PlantNumber eq '1000' and WorkplaceName eq 'WAINDYCA'"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": ["Function","EntryNumber","PlantNumber","ViewName","WorkplaceName","EntryDescription"]
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "WorkerGenericItems",
+                  "WorkerGenericFieldlist",
+                  "WorkerGenericItems/WorkerGenericItemsFieldlist"
+                ]
+              }
+            },
+            "description": "Use deep expand for items: WorkerGenericItems/WorkerGenericItemsFieldlist"
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Function","Function desc",
+                  "EntryNumber","EntryNumber desc",
+                  "PlantNumber","PlantNumber desc",
+                  "ViewName","ViewName desc",
+                  "WorkplaceName","WorkplaceName desc",
+                  "EntryDescription","EntryDescription desc"
+                ]
+              }
+            }
+          },
+          { "name": "$top", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 40 } },
+          { "name": "$skip", "in": "query", "schema": { "type": "integer", "minimum": 0 } },
+          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    },
+
+    "/WorkerGenericItemSet(EntryNumber='{EntryNumber}',PlantNumber='{PlantNumber}',WorkplaceName='{WorkplaceName}',ViewName='{ViewName}')": {
+      "get": {
+        "operationId": "getWorkerGenericItemSetByKey",
+        "tags": ["WorkerGenericItemSet"],
+        "summary": "Read single WorkerGenericItemSet by composite key",
+        "parameters": [
+          { "name": "EntryNumber",   "in": "path", "required": true, "schema": { "type": "string" }, "example": "0000010003180010" },
+          { "name": "PlantNumber",   "in": "path", "required": true, "schema": { "type": "string" }, "example": "1000" },
+          { "name": "WorkplaceName", "in": "path", "required": true, "schema": { "type": "string" }, "example": "WAINDYCA" },
+          { "name": "ViewName",      "in": "path", "required": true, "schema": { "type": "string" }, "example": "HEADDATA", "description": "Use HEADDATA for detailed view" },
+          {
+            "name": "$select",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "enum": ["EntryNumber","PlantNumber","WorkplaceName","ViewName","Description","ViewType","ViewIcon"] }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "enum": ["WorkerGenericItemsFieldlist"] }
+            },
+            "description": "Include field-level details"
+          },
+          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "default": { "description": "Error", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    },
+
+    "/WorkplaceSet": {
+      "get": {
+        "operationId": "getWorkplaceSet",
+        "tags": ["WorkplaceSet"],
+        "summary": "Query WorkplaceSet (list workplaces; expand views)",
+        "parameters": [
+          { "name": "$filter", "in": "query", "allowReserved": true, "schema": { "type": "string" }, "description": "Example: PlantNumber eq '1000'" },
+          {
+            "name": "$select",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "enum": ["PlantNumber","WorkplaceName"] }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "enum": ["WorkplaceViews","WorkplaceViews/WorkplaceViewFields"] }
+            },
+            "description": "Pull views and optionally their fields"
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "enum": ["WorkplaceName","WorkplaceName desc","PlantNumber","PlantNumber desc"] }
+            }
+          },
+          { "name": "$top", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 40 } },
+          { "name": "$skip", "in": "query", "schema": { "type": "integer", "minimum": 0 } },
+          { "name": "$format", "in": "query", "schema": { "type": "string", "enum": ["json","xml"], "default": "json" } }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    },
+
+    "/WorkplaceSet(PlantNumber='{PlantNumber}',WorkplaceName='{WorkplaceName}')": {
+      "get": {
+        "operationId": "getWorkplaceByKey",
+        "tags": ["WorkplaceSet"],
+        "summary": "Read a single workplace (key segment)",
+        "parameters": [
+          { "name":"PlantNumber","in":"path","required":true,"schema":{"type":"string"},"example":"1000" },
+          { "name":"WorkplaceName","in":"path","required":true,"schema":{"type":"string"},"example":"WAINDYCA" },
+          {
+            "name":"$select","in":"query","style":"form","explode":false,"allowReserved":true,
+            "schema":{"type":"array","uniqueItems":true,"items":{"type":"string","enum":["PlantNumber","WorkplaceName"]}}
+          },
+          {
+            "name":"$expand","in":"query","style":"form","explode":false,"allowReserved":true,
+            "schema":{"type":"array","uniqueItems":true,"items":{"type":"string","enum":["WorkplaceViews","WorkplaceViews/WorkplaceViewFields"]}}
+          },
+          { "name":"$format","in":"query","schema":{"type":"string","enum":["json","xml"],"default":"json"} }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    },
+
+    "/WorkplaceSet(PlantNumber='{PlantNumber}',WorkplaceName='{WorkplaceName}')/WorkplaceViews": {
+      "get": {
+        "operationId": "getWorkplaceViews",
+        "tags": ["WorkplaceSet","WorkplaceViewSet"],
+        "summary": "List views for a workplace (optionally include fields)",
+        "parameters": [
+          { "name":"PlantNumber","in":"path","required":true,"schema":{"type":"string"},"example":"1000" },
+          { "name":"WorkplaceName","in":"path","required":true,"schema":{"type":"string"},"example":"WAINDYCA" },
+          { "name":"$filter","in":"query","allowReserved":true,"schema":{"type":"string"},
+            "description":"Example: View eq 'HEAD'" },
+          {
+            "name":"$select","in":"query","style":"form","explode":false,"allowReserved":true,
+            "schema":{"type":"array","uniqueItems":true,"items":{"type":"string",
+              "enum":["PlantNumber","WorkplaceName","View","ViewOrder","Description","ViewType","ViewIcon"]}}
+          },
+          {
+            "name":"$expand","in":"query","style":"form","explode":false,"allowReserved":true,
+            "schema":{"type":"array","uniqueItems":true,"items":{"type":"string","enum":["WorkplaceViewFields"]}}
+          },
+          { "name":"$orderby","in":"query","style":"form","explode":false,"allowReserved":true,
+            "schema":{"type":"array","uniqueItems":true,"items":{"type":"string","enum":["View","View desc","ViewOrder","ViewOrder desc"]}} },
+          { "name":"$top","in":"query","schema":{"type":"integer","minimum":1,"default":40} },
+          { "name":"$skip","in":"query","schema":{"type":"integer","minimum":0} },
+          { "name":"$format","in":"query","schema":{"type":"string","enum":["json","xml"],"default":"json"} }
+        ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": { "type": "http", "scheme": "basic" }
+    }
+  }
+}
+>>>>>>> caf69b7ada4551b954972f191ac4fc434f0f587c

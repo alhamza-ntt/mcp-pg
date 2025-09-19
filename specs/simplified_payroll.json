@@ -1,0 +1,1257 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Payroll Time Sheet",
+    "description": "API to record employee attendances, overtime, on-call times, and allowances \n\n You can find your company's API server in [List of API Servers in SAP SuccessFactors.](https://help.sap.com/viewer/d599f15995d348a1b45ba5603e2aba9b/LATEST/en-US/af2b8d5437494b12be88fe374eba75b6.html)",
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "description": "More Information available in help.sap.com",
+    "url": "https://help.sap.com/viewer/b2b06831c2cb4d5facd1dfde49a7aab5/latest"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.sap.com/successfactors/odata/v2"
+    }
+  ],
+  "security": [
+    {
+      "basicAuthentication": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "EmployeeTimeSheet"
+    },
+    {
+      "name": "ExternalAllowance"
+    },
+    {
+      "name": "TimeCollector"
+    },
+    {
+      "name": "ExternalTimeRecord"
+    }
+    
+  ],
+  "paths": {
+    "/EmployeeTimeSheet": {
+      "get": {
+        "tags": [
+          "EmployeeTimeSheet"
+        ],
+        "summary": "Get entities from EmployeeTimeSheet",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [OData Paging - Top](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374630)",
+            "schema": {
+              "type": "integer",
+              "default": 5
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [OData Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374631)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$search",
+            "in": "query",
+            "description": "Search items by search phrases, see [OData Searching](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374633)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [OData Filtering](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374625)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [OData Count](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374632)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [OData Sorting](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374629)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "absencesExist",
+                  "absencesExist desc",
+                  "approvalStatus",
+                  "approvalStatus desc",
+                  "comment",
+                  "comment desc",
+                  "createdBy",
+                  "createdBy desc",
+                  "createdDateTime",
+                  "createdDateTime desc",
+                  "cust_hashstring",
+                  "cust_hashstring desc",
+                  "cust_test",
+                  "cust_test desc",
+                  "editable",
+                  "editable desc",
+                  "endDate",
+                  "endDate desc",
+                  "entityUUID",
+                  "entityUUID desc",
+                  "externalCode",
+                  "externalCode desc",
+                  "externalTimesExist",
+                  "externalTimesExist desc",
+                  "fullWorkscheduleCovered",
+                  "fullWorkscheduleCovered desc",
+                  "generatedEntriesExist",
+                  "generatedEntriesExist desc",
+                  "lastModifiedBy",
+                  "lastModifiedBy desc",
+                  "lastModifiedDateTime",
+                  "lastModifiedDateTime desc",
+                  "manualEntriesExist",
+                  "manualEntriesExist desc",
+                  "mdfSystemRecordStatus",
+                  "mdfSystemRecordStatus desc",
+                  "period",
+                  "period desc",
+                  "plannedHoursAndMinutes",
+                  "plannedHoursAndMinutes desc",
+                  "plannedWorkingTime",
+                  "plannedWorkingTime desc",
+                  "plannedWorkingTimeInDays",
+                  "plannedWorkingTimeInDays desc",
+                  "recordedHoursAndMinutes",
+                  "recordedHoursAndMinutes desc",
+                  "recordedWorkingTime",
+                  "recordedWorkingTime desc",
+                  "recordedWorkingTimeInDays",
+                  "recordedWorkingTimeInDays desc",
+                  "replacedBy",
+                  "replacedBy desc",
+                  "replaces",
+                  "replaces desc",
+                  "singleApprovalRecordsOnly",
+                  "singleApprovalRecordsOnly desc",
+                  "singleRecordApprovalMissing",
+                  "singleRecordApprovalMissing desc",
+                  "startDate",
+                  "startDate desc",
+                  "timeRecordingMethod",
+                  "timeRecordingMethod desc",
+                  "timeRecordingStorage",
+                  "timeRecordingStorage desc",
+                  "timeSheetHash",
+                  "timeSheetHash desc",
+                  "userId",
+                  "userId desc",
+                  "workflowAction",
+                  "workflowAction desc",
+                  "workflowRequestId",
+                  "workflowRequestId desc",
+                  "workingTimeAccount",
+                  "workingTimeAccount desc",
+                  "workingTimeAccountHoursAndMinutes",
+                  "workingTimeAccountHoursAndMinutes desc"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "absencesExist",
+                  "approvalStatus",
+                  "comment",
+                  "createdBy",
+                  "createdDateTime",
+                  "cust_hashstring",
+                  "cust_test",
+                  "editable",
+                  "endDate",
+                  "entityUUID",
+                  "externalCode",
+                  "externalTimesExist",
+                  "fullWorkscheduleCovered",
+                  "generatedEntriesExist",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "manualEntriesExist",
+                  "mdfSystemRecordStatus",
+                  "period",
+                  "plannedHoursAndMinutes",
+                  "plannedWorkingTime",
+                  "plannedWorkingTimeInDays",
+                  "recordedHoursAndMinutes",
+                  "recordedWorkingTime",
+                  "recordedWorkingTimeInDays",
+                  "replacedBy",
+                  "replaces",
+                  "singleApprovalRecordsOnly",
+                  "singleRecordApprovalMissing",
+                  "startDate",
+                  "timeRecordingMethod",
+                  "timeRecordingStorage",
+                  "timeSheetHash",
+                  "userId",
+                  "workflowAction",
+                  "workflowRequestId",
+                  "workingTimeAccount",
+                  "workingTimeAccountHoursAndMinutes"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Expand related entities, see [OData Expand](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374621)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "*",
+                  "allowance",
+                  "employeeTimeSheetEntry",
+                  "employeeTimeValuationResult",
+                  "replacedByNav",
+                  "replacesNav"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Wrapper",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "title": "Collection of EmployeeTimeSheet",
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/SFOData.EmployeeTimeSheet"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EmployeeTimeSheet('{externalCode}')": {
+      "get": {
+        "tags": [
+          "EmployeeTimeSheet"
+        ],
+        "summary": "Get entity from EmployeeTimeSheet by key",
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "path",
+            "description": "key: externalCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "absencesExist",
+                  "approvalStatus",
+                  "comment",
+                  "createdBy",
+                  "createdDateTime",
+                  "cust_hashstring",
+                  "cust_test",
+                  "editable",
+                  "endDate",
+                  "entityUUID",
+                  "externalCode",
+                  "externalTimesExist",
+                  "fullWorkscheduleCovered",
+                  "generatedEntriesExist",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "manualEntriesExist",
+                  "mdfSystemRecordStatus",
+                  "period",
+                  "plannedHoursAndMinutes",
+                  "plannedWorkingTime",
+                  "plannedWorkingTimeInDays",
+                  "recordedHoursAndMinutes",
+                  "recordedWorkingTime",
+                  "recordedWorkingTimeInDays",
+                  "replacedBy",
+                  "replaces",
+                  "singleApprovalRecordsOnly",
+                  "singleRecordApprovalMissing",
+                  "startDate",
+                  "timeRecordingMethod",
+                  "timeRecordingStorage",
+                  "timeSheetHash",
+                  "userId",
+                  "workflowAction",
+                  "workflowRequestId",
+                  "workingTimeAccount",
+                  "workingTimeAccountHoursAndMinutes"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Expand related entities, see [OData Expand](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374621)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "*",
+                  "allowance",
+                  "employeeTimeSheetEntry",
+                  "employeeTimeValuationResult",
+                  "replacedByNav",
+                  "replacesNav"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "EmployeeTimeSheet",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/SFOData.EmployeeTimeSheet"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ExternalAllowance": {
+      "get": {
+        "tags": [
+          "ExternalAllowance"
+        ],
+        "summary": "Get entities from ExternalAllowance",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [OData Paging - Top](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374630)",
+            "schema": {
+              "type": "integer",
+              "default": 5
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [OData Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374631)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$search",
+            "in": "query",
+            "description": "Search items by search phrases, see [OData Searching](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374633)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [OData Filtering](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374625)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [OData Count](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374632)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [OData Sorting](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374629)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "allowanceType",
+                  "allowanceType desc",
+                  "correctionScenario",
+                  "correctionScenario desc",
+                  "costCenter",
+                  "costCenter desc",
+                  "createdBy",
+                  "createdBy desc",
+                  "createdDateTime",
+                  "createdDateTime desc",
+                  "date",
+                  "date desc",
+                  "deleteExternalAllowance",
+                  "deleteExternalAllowance desc",
+                  "externalCode",
+                  "externalCode desc",
+                  "lastModifiedBy",
+                  "lastModifiedBy desc",
+                  "lastModifiedDateTime",
+                  "lastModifiedDateTime desc",
+                  "mdfSystemRecordStatus",
+                  "mdfSystemRecordStatus desc",
+                  "status",
+                  "status desc",
+                  "userId",
+                  "userId desc",
+                  "value",
+                  "value desc"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "allowanceType",
+                  "correctionScenario",
+                  "costCenter",
+                  "createdBy",
+                  "createdDateTime",
+                  "date",
+                  "deleteExternalAllowance",
+                  "externalCode",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "mdfSystemRecordStatus",
+                  "status",
+                  "userId",
+                  "value"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Wrapper",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "title": "Collection of ExternalAllowance",
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/SFOData.ExternalAllowance"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ExternalAllowance"
+        ],
+        "summary": "Add new entity to ExternalAllowance",
+        "requestBody": {
+          "description": "New entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SFOData.ExternalAllowance"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Created entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Created ExternalAllowance",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/SFOData.ExternalAllowance"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "ExternalAllowance"
+      }
+    },
+    "/ExternalAllowance('{externalCode}')": {
+      "get": {
+        "tags": [
+          "ExternalAllowance"
+        ],
+        "summary": "Get entity from ExternalAllowance by key",
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "path",
+            "description": "key: externalCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "allowanceType",
+                  "correctionScenario",
+                  "costCenter",
+                  "createdBy",
+                  "createdDateTime",
+                  "date",
+                  "deleteExternalAllowance",
+                  "externalCode",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "mdfSystemRecordStatus",
+                  "status",
+                  "userId",
+                  "value"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ExternalAllowance",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/SFOData.ExternalAllowance"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ExternalAllowance"
+        ],
+        "summary": "Update entity in ExternalAllowance",
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "path",
+            "description": "key: externalCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "New property values",
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Modified ExternalAllowance",
+                "type": "object",
+                "properties": {
+                  "d": {
+                    "$ref": "#/components/schemas/SFOData.ExternalAllowance"
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "204": {
+            "description": "Success",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "ExternalAllowance"
+      },
+      "delete": {
+        "tags": [
+          "ExternalAllowance"
+        ],
+        "summary": "Delete entity from ExternalAllowance",
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "path",
+            "description": "key: externalCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "ETag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/TimeCollector": {
+      "get": {
+        "tags": [
+          "TimeCollector"
+        ],
+        "summary": "Get entities from TimeCollector",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [OData Paging - Top](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374630)",
+            "schema": {
+              "type": "integer",
+              "default": 5
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [OData Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374631)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$search",
+            "in": "query",
+            "description": "Search items by search phrases, see [OData Searching](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374633)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [OData Filtering](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374625)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [OData Count](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374632)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [OData Sorting](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374629)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "bookingDate",
+                  "bookingDate desc",
+                  "changeValue",
+                  "changeValue desc",
+                  "collectorValue",
+                  "collectorValue desc",
+                  "createdBy",
+                  "createdBy desc",
+                  "createdDateTime",
+                  "createdDateTime desc",
+                  "endDate",
+                  "endDate desc",
+                  "entityUUID",
+                  "entityUUID desc",
+                  "externalCode",
+                  "externalCode desc",
+                  "lastModifiedBy",
+                  "lastModifiedBy desc",
+                  "lastModifiedDateTime",
+                  "lastModifiedDateTime desc",
+                  "mdfSystemRecordStatus",
+                  "mdfSystemRecordStatus desc",
+                  "startDate",
+                  "startDate desc",
+                  "timeCollectorType",
+                  "timeCollectorType desc",
+                  "userId",
+                  "userId desc"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "bookingDate",
+                  "changeValue",
+                  "collectorValue",
+                  "createdBy",
+                  "createdDateTime",
+                  "endDate",
+                  "entityUUID",
+                  "externalCode",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "mdfSystemRecordStatus",
+                  "startDate",
+                  "timeCollectorType",
+                  "userId"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Wrapper",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "title": "Collection of TimeCollector",
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/SFOData.TimeCollector"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/TimeCollector('{externalCode}')": {
+      "get": {
+        "tags": [
+          "TimeCollector"
+        ],
+        "summary": "Get entity from TimeCollector by key",
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "path",
+            "description": "key: externalCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374620)",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "bookingDate",
+                  "changeValue",
+                  "collectorValue",
+                  "createdBy",
+                  "createdDateTime",
+                  "endDate",
+                  "entityUUID",
+                  "externalCode",
+                  "lastModifiedBy",
+                  "lastModifiedDateTime",
+                  "mdfSystemRecordStatus",
+                  "startDate",
+                  "timeCollectorType",
+                  "userId"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "TimeCollector",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/SFOData.TimeCollector"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/odata.error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  },
+  "components": {
+    "schemas": {
+      "odata.error": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/odata.error.main"
+          }
+        }
+      },
+      "odata.error.main": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/odata.error.detail"
+            }
+          },
+          "innererror": {
+            "type": "object",
+            "properties": {},
+            "description": "The structure of this object is service-specific"
+          }
+        }
+      },
+      "odata.error.detail": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        }
+      },
+      "SFOData.EmployeeTimeSheet": {
+        "title": "EmployeeTimeSheet",
+        "type": "object",
+        "properties": {
+          "externalCode": {
+            "maxLength": 128,
+            "type": "string"
+          },
+          "allowance": {
+            "title": "Related Collection(SFOData.Allowance)",
+            "type": "object",
+            "properties": {
+              "results": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SFOData.Allowance"
+                }
+              }
+            }
+          },
+          "employeeTimeSheetEntry": {
+            "title": "Related Collection(SFOData.EmployeeTimeSheetEntry)",
+            "type": "object",
+            "properties": {
+              "results": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SFOData.EmployeeTimeSheetEntry"
+                }
+              }
+            }
+          },
+          "employeeTimeValuationResult": {
+            "title": "Related Collection(SFOData.EmployeeTimeValuationResult)",
+            "type": "object",
+            "properties": {
+              "results": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SFOData.EmployeeTimeValuationResult"
+                }
+              }
+            }
+          },
+          "replacedByNav": {
+            "$ref": "#/components/schemas/SFOData.EmployeeTimeSheet"
+          },
+          "replacesNav": {
+            "$ref": "#/components/schemas/SFOData.EmployeeTimeSheet"
+          }
+        }
+      },
+      "SFOData.ExternalAllowance": {
+        "title": "ExternalAllowance",
+        "type": "object",
+        "properties": {
+          "externalCode": {
+            "maxLength": 128,
+            "type": "string"
+          }
+        }
+      },
+      "SFOData.TimeCollector": {
+        "title": "TimeCollector",
+        "type": "object",
+        "properties": {
+          "externalCode": {
+            "maxLength": 128,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/odata.error"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "description": "Show only the first n items, see [OData Paging - Top](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374630)",
+        "schema": {
+          "type": "integer",
+          "default": 5
+        }
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "description": "Skip the first n items, see [OData Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374631)",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "description": "Include count of items, see [OData Count](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374632)",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "filter": {
+        "name": "$filter",
+        "in": "query",
+        "description": "Filter items by property values, see [OData Filtering](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374625)",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "search": {
+        "name": "$search",
+        "in": "query",
+        "description": "Search items by search phrases, see [OData Searching](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc445374633)",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuthentication": {
+        "type": "http",
+        "description": "Basic Authentication",
+        "scheme": "basic"
+      }
+    }
+  },
+  "x-sap-shortText": "API to record employee attendances and overtime for payroll purpose",
+  "x-servers": [
+    {
+      "url": "https://{api-server}/odata/v2",
+      "description": "OData APIs for the SuccessFactors Data Centers",
+      "templates": {
+        "api-server": {
+          "description": "SuccessFactors Data Center host",
+          "default": "apisalesdemo8.successfactors.com"
+        }
+      }
+    }
+  ],
+  "x-original-swagger-version": "2.0"
+}
