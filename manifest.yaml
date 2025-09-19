@@ -1,0 +1,11 @@
+---
+applications:
+  - name: mcp-api
+    memory: 256M
+    instances: 1
+    buildpacks:
+      - python_buildpack
+    path: .
+   # routes:
+    #  - route: mcp-api-test.cfapps.eu10-004.hana.ondemand.com
+    command: python Odata_mcp.py
