@@ -8,4 +8,4 @@ applications:
     path: .
    # routes:
     #  - route: mcp-api-test.cfapps.eu10-004.hana.ondemand.com
-    command: python Odata_mcp.py
+    command: python rag_server.py
