@@ -25,7 +25,7 @@ headerss = {
 client = httpx.AsyncClient(
     base_url=os.getenv("plannedorder_base_url"),
     headers=headerss,
-    auth=(sap_user, sap_password),  # Basic Auth tuple
+    auth=(sap_user, sap_password),  
     timeout=30.0,
 )
 
@@ -47,7 +47,7 @@ for path, methods in spec.get("paths", {}).items():
 mcp = FastMCP.from_openapi(
     openapi_spec=spec,
     client=client,
-    name="Planned Orders MCP",
+    name="Planned_Orders_MCP",
     stateless_http=True,          
     json_response=True            
 )
@@ -60,6 +60,17 @@ async def healthz(_: Request) -> PlainTextResponse:
 @mcp.custom_route("/", methods=["GET"])
 async def root(_: Request) -> JSONResponse:
     return JSONResponse({"status": "ok", "mcp_endpoint": "/mcp"})
+
+
+@mcp.custom_route("/debug_env", methods=["GET"])
+async def debug_env(_: Request) -> JSONResponse:
+    return JSONResponse({
+        "plannedorder_user": os.getenv("plannedorder_user"),
+        "plannedorder_password_exists": os.getenv("plannedorder_password") is not None,
+        "plannedorder_base_url": os.getenv("plannedorder_base_url"),
+    })
+
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
