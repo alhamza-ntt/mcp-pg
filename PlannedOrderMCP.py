@@ -11,17 +11,21 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-#SAP MCP with planned order api from SAP API Business Hub and  authenticated client
+#SAP MCP with planned order api from actual s4hana system
+# auth comes from the s4hana system credentials
+
+sap_user = os.getenv("plannedorder_user")
+sap_password = os.getenv("plannedorder_password")
 
 headerss = {
-    "APIKey": os.getenv("SAP_APIKey"),
     "Accept": "application/json",
     "DataServiceVersion": "2.0",
 }
 
 client = httpx.AsyncClient(
-    base_url="https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap",
+    base_url=os.getenv("plannedorder_base_url"),
     headers=headerss,
+    auth=(sap_user, sap_password),  # Basic Auth tuple
     timeout=30.0,
 )
 
