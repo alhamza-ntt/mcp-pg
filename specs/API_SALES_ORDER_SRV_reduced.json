@@ -1,0 +1,683 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sales Order (A2X)",
+    "version": "1.0.0",
+    "description": "In every API call, you can make use of the following operations:\r\n - You can read entire sales orders or only parts of the data, using the provided filters.\r\n - You can create sales orders. You can use deep insert requests, that is, you create a header plus at least one of the following entities: header partner, header partner address, header pricing element, header billing plan, header billing plan item, header text, payment plan, header related object, item, item partner, item partner address, item pricing element, item billing plan, item billing plan item, item text, and item related object. \r\nIf the header already exists, you can create the following sub-entities on their own: header partner, header pricing element, header text, payment plan, header related object, item partner, item pricing element, item text, and item related object.\r\n - For existing sales orders, you can create new items. You can use deep insert requests, that is, you create an item plus at least one of the following entities: item partner, item partner address, item pricing element, item billing plan, item billing plan item, item text, and item related object. If the item already exists, you can create the following sub-entities on their own: item partner, item pricing element, item text, item related object, and item schedule line.\r\n - For existing sales orders, you can update the following entities (that is, you can change the content of their properties): header, header partner, header partner address, header pricing element, header billing plan, header billing plan item, header text, payment plan, item, item partner, item partner address, item pricing element, item billing plan, item billing plan item, item text, and item schedule line.\r\n - For existing sales orders, you can delete the following entities: header, header partner, header pricing element, header billing plan item, header text, payment plan, header related object, item, item partner, item pricing element, item billing plan item, item text, item related object, and item schedule line.\r\n - You can accept or deny approval requests for sales orders that cannot be processed without the consent of an approver."
+  },
+  "servers": [
+    {
+      "url": "https://{host}:{port}/sap/opu/odata/sap/API_SALES_ORDER_SRV",
+      "variables": {
+        "host": {
+          "default": ""
+        },
+        "port": {
+          "default": ""
+        }
+      }
+    },
+    {
+      "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV"
+    }
+  ],
+  "security": [
+    {
+      "OAuth2Auth": [
+        "API_SALES_ORDER_SRV_0001"
+      ]
+    },
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/A_SalesOrder": {
+      "get": {
+        "summary": "Reads all sales order headers.",
+        "description": "Reads the header data of all sales orders in the system.",
+        "tags": [
+          "Sales Order Header"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=64)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/count"
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=65)",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "SalesOrder",
+                  "SalesOrder desc",
+                  "SalesOrderType",
+                  "SalesOrderType desc",
+                  "SalesOrderTypeInternalCode",
+                  "SalesOrderTypeInternalCode desc",
+                  "SalesOrganization",
+                  "SalesOrganization desc",
+                  "DistributionChannel",
+                  "DistributionChannel desc",
+                  "OrganizationDivision",
+                  "OrganizationDivision desc",
+                  "SalesGroup",
+                  "SalesGroup desc",
+                  "SalesOffice",
+                  "SalesOffice desc",
+                  "SalesDistrict",
+                  "SalesDistrict desc",
+                  "SoldToParty",
+                  "SoldToParty desc",
+                  "CreationDate",
+                  "CreationDate desc",
+                  "CreatedByUser",
+                  "CreatedByUser desc",
+                  "LastChangeDate",
+                  "LastChangeDate desc",
+                  "SenderBusinessSystemName",
+                  "SenderBusinessSystemName desc",
+                  "ExternalDocumentID",
+                  "ExternalDocumentID desc",
+                  "LastChangeDateTime",
+                  "LastChangeDateTime desc",
+                  "ExternalDocLastChangeDateTime",
+                  "ExternalDocLastChangeDateTime desc",
+                  "PurchaseOrderByCustomer",
+                  "PurchaseOrderByCustomer desc",
+                  "PurchaseOrderByShipToParty",
+                  "PurchaseOrderByShipToParty desc",
+                  "CustomerPurchaseOrderType",
+                  "CustomerPurchaseOrderType desc",
+                  "CustomerPurchaseOrderDate",
+                  "CustomerPurchaseOrderDate desc",
+                  "SalesOrderDate",
+                  "SalesOrderDate desc",
+                  "TotalNetAmount",
+                  "TotalNetAmount desc",
+                  "OverallDeliveryStatus",
+                  "OverallDeliveryStatus desc",
+                  "TotalBlockStatus",
+                  "TotalBlockStatus desc",
+                  "OverallOrdReltdBillgStatus",
+                  "OverallOrdReltdBillgStatus desc",
+                  "OverallSDDocReferenceStatus",
+                  "OverallSDDocReferenceStatus desc",
+                  "TransactionCurrency",
+                  "TransactionCurrency desc",
+                  "SDDocumentReason",
+                  "SDDocumentReason desc",
+                  "PricingDate",
+                  "PricingDate desc",
+                  "PriceDetnExchangeRate",
+                  "PriceDetnExchangeRate desc",
+                  "BillingPlan",
+                  "BillingPlan desc",
+                  "RequestedDeliveryDate",
+                  "RequestedDeliveryDate desc",
+                  "ShippingCondition",
+                  "ShippingCondition desc",
+                  "CompleteDeliveryIsDefined",
+                  "CompleteDeliveryIsDefined desc",
+                  "ShippingType",
+                  "ShippingType desc",
+                  "HeaderBillingBlockReason",
+                  "HeaderBillingBlockReason desc",
+                  "DeliveryBlockReason",
+                  "DeliveryBlockReason desc",
+                  "DeliveryDateTypeRule",
+                  "DeliveryDateTypeRule desc",
+                  "IncotermsClassification",
+                  "IncotermsClassification desc",
+                  "IncotermsTransferLocation",
+                  "IncotermsTransferLocation desc",
+                  "IncotermsLocation1",
+                  "IncotermsLocation1 desc",
+                  "IncotermsLocation2",
+                  "IncotermsLocation2 desc",
+                  "IncotermsVersion",
+                  "IncotermsVersion desc",
+                  "CustomerPriceGroup",
+                  "CustomerPriceGroup desc",
+                  "PriceListType",
+                  "PriceListType desc",
+                  "CustomerPaymentTerms",
+                  "CustomerPaymentTerms desc",
+                  "PaymentMethod",
+                  "PaymentMethod desc",
+                  "FixedValueDate",
+                  "FixedValueDate desc",
+                  "AssignmentReference",
+                  "AssignmentReference desc",
+                  "ReferenceSDDocument",
+                  "ReferenceSDDocument desc",
+                  "ReferenceSDDocumentCategory",
+                  "ReferenceSDDocumentCategory desc",
+                  "AccountingDocExternalReference",
+                  "AccountingDocExternalReference desc",
+                  "CustomerAccountAssignmentGroup",
+                  "CustomerAccountAssignmentGroup desc",
+                  "AccountingExchangeRate",
+                  "AccountingExchangeRate desc",
+                  "CustomerGroup",
+                  "CustomerGroup desc",
+                  "AdditionalCustomerGroup1",
+                  "AdditionalCustomerGroup1 desc",
+                  "AdditionalCustomerGroup2",
+                  "AdditionalCustomerGroup2 desc",
+                  "AdditionalCustomerGroup3",
+                  "AdditionalCustomerGroup3 desc",
+                  "AdditionalCustomerGroup4",
+                  "AdditionalCustomerGroup4 desc",
+                  "AdditionalCustomerGroup5",
+                  "AdditionalCustomerGroup5 desc",
+                  "SlsDocIsRlvtForProofOfDeliv",
+                  "SlsDocIsRlvtForProofOfDeliv desc",
+                  "CustomerTaxClassification1",
+                  "CustomerTaxClassification1 desc",
+                  "CustomerTaxClassification2",
+                  "CustomerTaxClassification2 desc",
+                  "CustomerTaxClassification3",
+                  "CustomerTaxClassification3 desc",
+                  "CustomerTaxClassification4",
+                  "CustomerTaxClassification4 desc",
+                  "CustomerTaxClassification5",
+                  "CustomerTaxClassification5 desc",
+                  "CustomerTaxClassification6",
+                  "CustomerTaxClassification6 desc",
+                  "CustomerTaxClassification7",
+                  "CustomerTaxClassification7 desc",
+                  "CustomerTaxClassification8",
+                  "CustomerTaxClassification8 desc",
+                  "CustomerTaxClassification9",
+                  "CustomerTaxClassification9 desc",
+                  "TaxDepartureCountry",
+                  "TaxDepartureCountry desc",
+                  "VATRegistrationCountry",
+                  "VATRegistrationCountry desc",
+                  "SalesOrderApprovalReason",
+                  "SalesOrderApprovalReason desc",
+                  "SalesDocApprovalStatus",
+                  "SalesDocApprovalStatus desc",
+                  "OverallSDProcessStatus",
+                  "OverallSDProcessStatus desc",
+                  "TotalCreditCheckStatus",
+                  "TotalCreditCheckStatus desc",
+                  "OverallTotalDeliveryStatus",
+                  "OverallTotalDeliveryStatus desc",
+                  "OverallSDDocumentRejectionSts",
+                  "OverallSDDocumentRejectionSts desc",
+                  "BillingDocumentDate",
+                  "BillingDocumentDate desc",
+                  "ContractAccount",
+                  "ContractAccount desc",
+                  "AdditionalValueDays",
+                  "AdditionalValueDays desc",
+                  "CustomerPurchaseOrderSuplmnt",
+                  "CustomerPurchaseOrderSuplmnt desc",
+                  "ServicesRenderedDate",
+                  "ServicesRenderedDate desc"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=68)",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "SalesOrder",
+                  "SalesOrderType",
+                  "SalesOrderTypeInternalCode",
+                  "SalesOrganization",
+                  "DistributionChannel",
+                  "OrganizationDivision",
+                  "SalesGroup",
+                  "SalesOffice",
+                  "SalesDistrict",
+                  "SoldToParty",
+                  "CreationDate",
+                  "CreatedByUser",
+                  "LastChangeDate",
+                  "SenderBusinessSystemName",
+                  "ExternalDocumentID",
+                  "LastChangeDateTime",
+                  "ExternalDocLastChangeDateTime",
+                  "PurchaseOrderByCustomer",
+                  "PurchaseOrderByShipToParty",
+                  "CustomerPurchaseOrderType",
+                  "CustomerPurchaseOrderDate",
+                  "SalesOrderDate",
+                  "TotalNetAmount",
+                  "OverallDeliveryStatus",
+                  "TotalBlockStatus",
+                  "OverallOrdReltdBillgStatus",
+                  "OverallSDDocReferenceStatus",
+                  "TransactionCurrency",
+                  "SDDocumentReason",
+                  "PricingDate",
+                  "PriceDetnExchangeRate",
+                  "BillingPlan",
+                  "RequestedDeliveryDate",
+                  "ShippingCondition",
+                  "CompleteDeliveryIsDefined",
+                  "ShippingType",
+                  "HeaderBillingBlockReason",
+                  "DeliveryBlockReason",
+                  "DeliveryDateTypeRule",
+                  "IncotermsClassification",
+                  "IncotermsTransferLocation",
+                  "IncotermsLocation1",
+                  "IncotermsLocation2",
+                  "IncotermsVersion",
+                  "CustomerPriceGroup",
+                  "PriceListType",
+                  "CustomerPaymentTerms",
+                  "PaymentMethod",
+                  "FixedValueDate",
+                  "AssignmentReference",
+                  "ReferenceSDDocument",
+                  "ReferenceSDDocumentCategory",
+                  "AccountingDocExternalReference",
+                  "CustomerAccountAssignmentGroup",
+                  "AccountingExchangeRate",
+                  "CustomerGroup",
+                  "AdditionalCustomerGroup1",
+                  "AdditionalCustomerGroup2",
+                  "AdditionalCustomerGroup3",
+                  "AdditionalCustomerGroup4",
+                  "AdditionalCustomerGroup5",
+                  "SlsDocIsRlvtForProofOfDeliv",
+                  "CustomerTaxClassification1",
+                  "CustomerTaxClassification2",
+                  "CustomerTaxClassification3",
+                  "CustomerTaxClassification4",
+                  "CustomerTaxClassification5",
+                  "CustomerTaxClassification6",
+                  "CustomerTaxClassification7",
+                  "CustomerTaxClassification8",
+                  "CustomerTaxClassification9",
+                  "TaxDepartureCountry",
+                  "VATRegistrationCountry",
+                  "SalesOrderApprovalReason",
+                  "SalesDocApprovalStatus",
+                  "OverallSDProcessStatus",
+                  "TotalCreditCheckStatus",
+                  "OverallTotalDeliveryStatus",
+                  "OverallSDDocumentRejectionSts",
+                  "BillingDocumentDate",
+                  "ContractAccount",
+                  "AdditionalValueDays",
+                  "CustomerPurchaseOrderSuplmnt",
+                  "ServicesRenderedDate",
+                  "to_BillingPlan",
+                  "to_Item",
+                  "to_Partner",
+                  "to_PaymentPlanItemDetails",
+                  "to_PrecedingProcFlowDoc",
+                  "to_PricingElement",
+                  "to_RelatedObject",
+                  "to_SubsequentProcFlowDoc",
+                  "to_Text"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Expand related entities, see [Expand](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=63)",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "to_BillingPlan",
+                  "to_Item",
+                  "to_Partner",
+                  "to_PaymentPlanItemDetails",
+                  "to_PrecedingProcFlowDoc",
+                  "to_PricingElement",
+                  "to_RelatedObject",
+                  "to_SubsequentProcFlowDoc",
+                  "to_Text"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Wrapper",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "title": "Collection of A_SalesOrderType",
+                      "type": "object",
+                      "properties": {
+                        "__count": {
+                          "$ref": "#/components/schemas/count"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/API_SALES_ORDER_SRV.A_SalesOrderType"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/A_SalesOrder('{SalesOrder}')": {
+      "get": {
+        "summary": "Reads the header of a sales order.",
+        "description": "Reads the header data of a specific sales order. Consumers must pass the sales order ID (key field).",
+        "tags": [
+          "Sales Order Header"
+        ],
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=68)",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "SalesOrder",
+                  "SalesOrderType",
+                  "SalesOrderTypeInternalCode",
+                  "SalesOrganization",
+                  "DistributionChannel",
+                  "OrganizationDivision",
+                  "SalesGroup",
+                  "SalesOffice",
+                  "SalesDistrict",
+                  "SoldToParty",
+                  "CreationDate",
+                  "CreatedByUser",
+                  "LastChangeDate",
+                  "SenderBusinessSystemName",
+                  "ExternalDocumentID",
+                  "LastChangeDateTime",
+                  "ExternalDocLastChangeDateTime",
+                  "PurchaseOrderByCustomer",
+                  "PurchaseOrderByShipToParty",
+                  "CustomerPurchaseOrderType",
+                  "CustomerPurchaseOrderDate",
+                  "SalesOrderDate",
+                  "TotalNetAmount",
+                  "OverallDeliveryStatus",
+                  "TotalBlockStatus",
+                  "OverallOrdReltdBillgStatus",
+                  "OverallSDDocReferenceStatus",
+                  "TransactionCurrency",
+                  "SDDocumentReason",
+                  "PricingDate",
+                  "PriceDetnExchangeRate",
+                  "BillingPlan",
+                  "RequestedDeliveryDate",
+                  "ShippingCondition",
+                  "CompleteDeliveryIsDefined",
+                  "ShippingType",
+                  "HeaderBillingBlockReason",
+                  "DeliveryBlockReason",
+                  "DeliveryDateTypeRule",
+                  "IncotermsClassification",
+                  "IncotermsTransferLocation",
+                  "IncotermsLocation1",
+                  "IncotermsLocation2",
+                  "IncotermsVersion",
+                  "CustomerPriceGroup",
+                  "PriceListType",
+                  "CustomerPaymentTerms",
+                  "PaymentMethod",
+                  "FixedValueDate",
+                  "AssignmentReference",
+                  "ReferenceSDDocument",
+                  "ReferenceSDDocumentCategory",
+                  "AccountingDocExternalReference",
+                  "CustomerAccountAssignmentGroup",
+                  "AccountingExchangeRate",
+                  "CustomerGroup",
+                  "AdditionalCustomerGroup1",
+                  "AdditionalCustomerGroup2",
+                  "AdditionalCustomerGroup3",
+                  "AdditionalCustomerGroup4",
+                  "AdditionalCustomerGroup5",
+                  "SlsDocIsRlvtForProofOfDeliv",
+                  "CustomerTaxClassification1",
+                  "CustomerTaxClassification2",
+                  "CustomerTaxClassification3",
+                  "CustomerTaxClassification4",
+                  "CustomerTaxClassification5",
+                  "CustomerTaxClassification6",
+                  "CustomerTaxClassification7",
+                  "CustomerTaxClassification8",
+                  "CustomerTaxClassification9",
+                  "TaxDepartureCountry",
+                  "VATRegistrationCountry",
+                  "SalesOrderApprovalReason",
+                  "SalesDocApprovalStatus",
+                  "OverallSDProcessStatus",
+                  "TotalCreditCheckStatus",
+                  "OverallTotalDeliveryStatus",
+                  "OverallSDDocumentRejectionSts",
+                  "BillingDocumentDate",
+                  "ContractAccount",
+                  "AdditionalValueDays",
+                  "CustomerPurchaseOrderSuplmnt",
+                  "ServicesRenderedDate",
+                  "to_BillingPlan",
+                  "to_Item",
+                  "to_Partner",
+                  "to_PaymentPlanItemDetails",
+                  "to_PrecedingProcFlowDoc",
+                  "to_PricingElement",
+                  "to_RelatedObject",
+                  "to_SubsequentProcFlowDoc",
+                  "to_Text"
+                ]
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Expand related entities, see [Expand](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=63)",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "to_BillingPlan",
+                  "to_Item",
+                  "to_Partner",
+                  "to_PaymentPlanItemDetails",
+                  "to_PrecedingProcFlowDoc",
+                  "to_PricingElement",
+                  "to_RelatedObject",
+                  "to_SubsequentProcFlowDoc",
+                  "to_Text"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "A_SalesOrderType",
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/API_SALES_ORDER_SRV.A_SalesOrderType"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "error": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "description": "Show only the first n items",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "description": "Skip the first n items",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "description": "Include count of items",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "schemas": {
+      "error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "API_SALES_ORDER_SRV.A_SalesOrderType": {
+        "type": "object",
+        "description": "Minimal placeholder for Sales Order header entity.",
+        "properties": {
+          "SalesOrder": {
+            "type": "string",
+            "description": "Sales order ID"
+          },
+          "SalesOrderType": {
+            "type": "string",
+            "description": "Type of sales order"
+          },
+          "SalesOrganization": {
+            "type": "string"
+          },
+          "DistributionChannel": {
+            "type": "string"
+          },
+          "OrganizationDivision": {
+            "type": "string"
+          },
+          "SoldToParty": {
+            "type": "string"
+          },
+          "PurchaseOrderByCustomer": {
+            "type": "string"
+          },
+          "TotalNetAmount": {
+            "type": "number"
+          },
+          "TransactionCurrency": {
+            "type": "string"
+          },
+          "OverallDeliveryStatus": {
+            "type": "string"
+          },
+          "OverallBillingStatus": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "SalesOrder"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Sales Order Header"
+    }
+  ]
+}

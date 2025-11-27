@@ -1,0 +1,780 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Minimal SAP Planned Orders API",
+    "version": "1.0.0",
+    "description": "Minimal subset for MCP. Read-only access to planned order headers and their components."
+  },
+  "servers": [
+    {
+      "url": "https://{host}:{port}/sap/opu/odata/sap/API_PURCHASEREQUISITION_2_SRV",
+      "variables": {
+        "host": {
+          "default": "my403202-api.s4hana.cloud.sap"
+        },
+        "port": {
+          "default": "443"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Planned Order"
+    },
+    {
+      "name": "Planned Order Components"
+    }
+  ],
+  "paths": {
+    "/A_PlannedOrder": {
+      "tags": [
+        "Planned Order"
+      ],
+      "get": {
+        "summary": "Reads information on the header data of planned orders.",
+        "description": "Use OData query options $filter, $orderby, $select, $expand, $top, $skip, $count.",
+        "tags": [
+          "Planned Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "OData $filter expression"
+          },
+          {
+            "$ref": "#/components/parameters/count"
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "OData $orderby expression"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated properties to return"
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "to_PlannedOrderComponent"
+              ]
+            },
+            "description": "Expand related entities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "type": "object",
+                      "properties": {
+                        "__count": {
+                          "$ref": "#/components/schemas/count"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/API_PLANNED_ORDERS.A_PlannedOrderType"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/A_PlannedOrder('{PlannedOrder}')": {
+      "parameters": [
+        {
+          "name": "PlannedOrder",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "description": "Planned Order"
+        }
+      ],
+      "get": {
+        "summary": "Reads information on the header data of a single planned order.",
+        "description": "Provide the planned order number.",
+        "tags": [
+          "Planned Order"
+        ],
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated properties to return"
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "to_PlannedOrderComponent"
+              ]
+            },
+            "description": "Expand related entities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "$ref": "#/components/schemas/API_PLANNED_ORDERS.A_PlannedOrderType"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/A_PlannedOrder('{PlannedOrder}')/to_PlannedOrderComponent": {
+      "parameters": [
+        {
+          "name": "PlannedOrder",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "description": "Planned Order"
+        }
+      ],
+      "get": {
+        "summary": "Reads the header data of a planned order including the components.",
+        "description": "Returns component materials and quantities for the planned order.",
+        "tags": [
+          "Planned Order",
+          "Planned Order Components"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "OData $filter expression"
+          },
+          {
+            "$ref": "#/components/parameters/count"
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "OData $orderby expression"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated properties to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "type": "object",
+                      "properties": {
+                        "__count": {
+                          "$ref": "#/components/schemas/count"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/API_PLANNED_ORDERS.A_PlannedOrderComponentType"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": "Max number of items to return (OData $top)."
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": "Number of items to skip (OData $skip)."
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "schema": {
+          "type": "boolean"
+        },
+        "description": "Include total count (OData $count=true)."
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "count": {
+        "type": "string",
+        "example": "123"
+      },
+      "API_PLANNED_ORDERS.A_PlannedOrderType": {
+        "type": "object",
+        "title": "Planned Order",
+        "properties": {
+          "PlannedOrder": {
+            "type": "string",
+            "maxLength": 10,
+            "title": "Planned Order"
+          },
+          "PlannedOrderType": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "PlannedOrderProfile": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "Material": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 40
+          },
+          "MaterialName": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 40
+          },
+          "ProductionPlant": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "MRPPlant": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "MRPArea": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "ProductionVersion": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "MaterialProcurementCategory": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          },
+          "MaterialProcurementType": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          },
+          "StorageLocation": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "BaseUnit": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3
+          },
+          "TotalQuantity": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "PlndOrderPlannedScrapQty": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "GoodsReceiptQty": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "IssuedQuantity": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "PlndOrderPlannedStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "PlndOrderPlannedStartTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "PlndOrderPlannedEndDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "PlndOrderPlannedEndTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "PlannedOrderOpeningDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastChangeDateTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProductionStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProductionEndDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "SalesOrder": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "SalesOrderItem": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 6
+          },
+          "Customer": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "WBSElementInternalID": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 24
+          },
+          "WBSElement": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 24
+          },
+          "WBSDescription": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 40
+          },
+          "AccountAssignmentCategory": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          },
+          "Reservation": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "MRPController": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3
+          },
+          "ProductionSupervisor": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3
+          },
+          "PurchasingGroup": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3
+          },
+          "PurchasingOrganization": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 4
+          },
+          "FixedSupplier": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "PurchasingDocument": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "PurchasingDocumentItem": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5
+          },
+          "QuotaArrangement": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 10
+          },
+          "QuotaArrangementItem": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3
+          },
+          "SupplierName": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 80
+          },
+          "PlannedOrderIsFirm": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "PlannedOrderIsConvertible": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "PlannedOrderBOMIsFixed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "PlannedOrderCapacityIsDsptchd": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "CapacityRequirement": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 12
+          },
+          "CapacityRequirementOrigin": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          },
+          "BillOfOperationsType": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          },
+          "BillOfOperationsGroup": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 8
+          },
+          "BillOfOperations": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 2
+          },
+          "LastScheduledDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScheduledBasicEndDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScheduledBasicEndTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScheduledBasicStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScheduledBasicStartTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "SchedulingType": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1
+          }
+        }
+      },
+      "API_PLANNED_ORDERS.A_PlannedOrderComponentType": {
+        "type": "object",
+        "title": "Planned Order Component",
+        "properties": {
+          "Reservation": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "ReservationItem": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "PlannedOrder": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "BOMItem": {
+            "type": "string",
+            "nullable": true
+          },
+          "BOMItemDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "BOMItemDescriptionLine2": {
+            "type": "string",
+            "nullable": true
+          },
+          "BillOfMaterialCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "SortField": {
+            "type": "string",
+            "nullable": true
+          },
+          "BillOfMaterialItemNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "BillOfMaterialInternalID": {
+            "type": "string",
+            "nullable": true
+          },
+          "BillOfMaterialVariant": {
+            "type": "string",
+            "nullable": true
+          },
+          "BOMItemCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "Material": {
+            "type": "string",
+            "nullable": true
+          },
+          "MatlCompRequirementDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "GoodsMovementEntryQty": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "EntryUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "RequiredQuantity": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "BaseUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "WithdrawnQuantity": {
+            "type": "string",
+            "nullable": true,
+            "format": "decimal"
+          },
+          "DebitCreditCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ComponentScrapInPercent": {
+            "type": "string",
+            "nullable": true
+          },
+          "QuantityIsFixed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "MaterialComponentIsPhantomItem": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "Plant": {
+            "type": "string",
+            "nullable": true
+          },
+          "StorageLocation": {
+            "type": "string",
+            "nullable": true
+          },
+          "SupplyArea": {
+            "type": "string",
+            "nullable": true
+          },
+          "MRPController": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrderPathValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrderLevelValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "Assembly": {
+            "type": "string",
+            "nullable": true
+          },
+          "AssemblyOrderPathValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "AssemblyOrderLevelValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "DiscontinuationGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "MatlCompDiscontinuationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "MatlCompIsFollowUpMaterial": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "FollowUpGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "FollowUpMaterial": {
+            "type": "string",
+            "nullable": true
+          },
+          "FollowUpMaterialIsNotActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "LastChangeDateTime": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

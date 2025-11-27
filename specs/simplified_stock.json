@@ -1,0 +1,210 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Material Stock - Read",
+    "version": "1.1.0",
+    "description": "This service enables you to retrieve material stock information using the OData protocol."
+  },
+  "servers": [
+    {
+      "url": "https://{host}:{port}/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV",
+      "variables": {
+        "host": {"default": ""},
+        "port": {"default": ""}
+      }
+    }
+  ],
+  "paths": {
+    "/A_MaterialStock": {
+      "get": {
+        "operationId": "get_A_MaterialStock",
+        "summary": "Get all materials with stock",
+        "parameters": [
+          {"$ref": "#/components/parameters/top"},
+          {"$ref": "#/components/parameters/skip"},
+          {"$ref": "#/components/parameters/filter"}
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {"$ref": "#/components/schemas/MaterialStock"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/A_MaterialStock('{Material}')": {
+      "get": {
+        "operationId": "get_A_MaterialStockMaterial",
+        "summary": "Get material by ID",
+        "parameters": [
+          {
+            "name": "Material",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "maxLength": 40}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {"$ref": "#/components/schemas/MaterialStock"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/A_MaterialStock('{Material}')/to_MatlStkInAcctMod": {
+      "get": {
+        "operationId": "get_A_MaterialStockMaterial_to_MatlStkInAcctMod",
+        "summary": "Get stock details for material",
+        "parameters": [
+          {
+            "name": "Material",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "maxLength": 40}
+          },
+          {"$ref": "#/components/parameters/top"},
+          {"$ref": "#/components/parameters/skip"},
+          {"$ref": "#/components/parameters/filter"}
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {"$ref": "#/components/schemas/MaterialStockDetail"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/A_MatlStkInAcctMod": {
+      "get": {
+        "operationId": "get_A_MatlStkInAcctMod",
+        "summary": "Get all stock details",
+        "parameters": [
+          {"$ref": "#/components/parameters/top"},
+          {"$ref": "#/components/parameters/skip"},
+          {"$ref": "#/components/parameters/filter"}
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "d": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {"$ref": "#/components/schemas/MaterialStockDetail"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "schema": {"type": "integer", "minimum": 0}
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "schema": {"type": "integer", "minimum": 0}
+      },
+      "filter": {
+        "name": "$filter",
+        "in": "query",
+        "schema": {"type": "string"}
+      }
+    },
+    "schemas": {
+      "MaterialStock": {
+        "type": "object",
+        "properties": {
+          "Material": {"type": "string", "maxLength": 40},
+          "MaterialBaseUnit": {"type": "string", "maxLength": 3}
+        }
+      },
+      "MaterialStockDetail": {
+        "type": "object",
+        "properties": {
+          "Material": {"type": "string", "maxLength": 40},
+          "Plant": {"type": "string", "maxLength": 4},
+          "StorageLocation": {"type": "string", "maxLength": 4},
+          "Batch": {"type": "string", "maxLength": 10},
+          "Supplier": {"type": "string", "maxLength": 10},
+          "Customer": {"type": "string", "maxLength": 10},
+          "WBSElementInternalID": {"type": "string", "maxLength": 8},
+          "SDDocument": {"type": "string", "maxLength": 10},
+          "SDDocumentItem": {"type": "string", "maxLength": 6},
+          "InventorySpecialStockType": {"type": "string", "maxLength": 1},
+          "InventoryStockType": {"type": "string", "maxLength": 2},
+          "WBSElementExternalID": {"type": "string", "maxLength": 24, "nullable": true},
+          "MaterialBaseUnit": {"type": "string", "maxLength": 3, "nullable": true},
+          "MatlWrhsStkQtyInMatlBaseUnit": {"type": "string", "nullable": true}
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [{"BasicAuth": []}]
+}

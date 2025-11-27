@@ -1,0 +1,121 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Purchase Requisition (Minimal)",
+    "version": "1.0.0",
+    "description": "Simplified subset of the SAP Purchase Requisition API for MCP usage. Includes only GET and POST for /PurchaseReqn and GET by key."
+  },
+  "servers": [
+    {
+      "url": "https://{host}:{port}/sap/opu/odata/sap/api_purchaserequisition_2/srvd_a2x/sap/purchaserequisition/0001"
+    }
+  ],
+  "paths": {
+    "/PurchaseReqn": {
+      "get": {
+        "summary": "Get Purchase Requisitions",
+        "operationId": "getPurchaseReqn",
+        "responses": {
+          "200": {
+            "description": "List of Purchase Requisitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PurchaseReqn"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Purchase Requisition",
+        "operationId": "createPurchaseReqn",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseReqnCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Purchase Requisition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReqn"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PurchaseReqn/{PurchaseRequisition}": {
+      "get": {
+        "summary": "Get Purchase Requisition by ID",
+        "operationId": "getPurchaseReqnById",
+        "parameters": [
+          {
+            "name": "PurchaseRequisition",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Purchase Requisition details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReqn"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PurchaseReqn": {
+        "type": "object",
+        "properties": {
+          "PurchaseRequisition": { "type": "string" },
+          "PurchaseRequisitionType": { "type": "string" },
+          "PurReqnDescription": { "type": "string" },
+          "SourceDetermination": { "type": "boolean" }
+        },
+        "required": ["PurchaseRequisition"]
+      },
+      "PurchaseReqnCreate": {
+        "type": "object",
+        "properties": {
+          "PurchaseRequisitionType": { "type": "string" },
+          "PurReqnDescription": { "type": "string" },
+          "SourceDetermination": { "type": "boolean" }
+        },
+        "required": ["PurchaseRequisitionType"]
+      }
+    }
+  }
+}
